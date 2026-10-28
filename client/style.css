@@ -1,0 +1,1336 @@
+/* ══════════════════════════════════════
+   Ben Kimim? — Flat Design Stiller
+   ══════════════════════════════════════ */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f5f6fa;
+    color: #2f3640;
+    min-height: 100vh;
+}
+
+/* ── Ekran yönetimi ─────────────── */
+.screen {
+    display: none;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.screen.active {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* ── LOBBY ───────────────────────── */
+.lobby-container {
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 8px;
+    border: 1px solid #dcdde1;
+}
+
+.lobby-container h1 {
+    font-size: 2rem;
+    margin-bottom: 5px;
+    color: #2f3640;
+}
+
+.subtitle {
+    color: #7f8fa6;
+    margin-bottom: 25px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+.hint {
+    color: #7f8fa6;
+    font-size: 0.8rem;
+    font-weight: normal;
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 10px 14px;
+    border: 2px solid #dcdde1;
+    border-radius: 6px;
+    background: #ffffff;
+    color: #2f3640;
+    font-size: 1rem;
+    outline: none;
+}
+
+input[type="text"]:focus {
+    border-color: #0097e6;
+}
+
+/* ── Butonlar ────────────────────── */
+.btn-primary {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 6px;
+    background: #0097e6;
+    color: #ffffff;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.btn-primary:hover {
+    background: #00a8ff;
+}
+
+.btn-primary:disabled {
+    background: #dcdde1;
+    color: #7f8fa6;
+    cursor: not-allowed;
+}
+
+.btn-small {
+    padding: 4px 8px;
+    border: 1px solid #dcdde1;
+    border-radius: 4px;
+    background: #f5f6fa;
+    color: #2f3640;
+    cursor: pointer;
+    font-size: 0.8rem;
+}
+
+.btn-small:hover {
+    background: #e84118;
+    color: #ffffff;
+}
+
+/* ── Oda kodu ────────────────────── */
+.room-code-display {
+    margin: 20px 0 10px;
+    padding: 10px;
+    background: #f5f6fa;
+    border: 1px solid #dcdde1;
+    border-radius: 6px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    letter-spacing: 3px;
+}
+
+#display-room-code {
+    color: #0097e6;
+}
+
+/* ── Oyuncu listesi (lobby) ──────── */
+#player-list {
+    list-style: none;
+    margin: 10px 0;
+    text-align: left;
+}
+
+#player-list li {
+    padding: 8px 10px;
+    border-bottom: 1px solid #dcdde1;
+}
+
+#player-list li .host-badge {
+    color: #e1b12c;
+    font-size: 0.75rem;
+    margin-left: 5px;
+    font-weight: bold;
+}
+
+/* ── Bağlantı durumu ─────────────── */
+#connection-status {
+    margin-top: 20px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.status-disconnected {
+    color: #e84118;
+}
+
+.status-connected {
+    color: #44bd32;
+}
+
+/* ══════════════════════════════════
+   OYUN EKRANI
+   ══════════════════════════════════ */
+
+.game-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.room-badge {
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: #7f8fa6;
+    letter-spacing: 1px;
+}
+
+/* ── Masa alanı ──────────────────── */
+#game-table-area {
+    position: relative;
+    width: 500px;
+    height: 500px;
+    margin: 0 auto;
+}
+
+#table-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background: #ffffff;
+    border: 2px solid #dcdde1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.table-placeholder {
+    color: #7f8fa6;
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+/* ── Oyuncu yuvarları ────────────── */
+#players-circle {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.player-node {
+    position: absolute;
+    text-align: center;
+    transform: translate(-50%, -50%);
+}
+
+.player-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: #dcdde1;
+    border: 3px solid #7f8fa6;
+    color: #2f3640;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.player-avatar.revealed {
+    background: #44bd32;
+    border-color: #44bd32;
+    color: #ffffff;
+}
+
+.player-assigned-name {
+    margin-top: 4px;
+    padding: 4px 8px;
+    background: #0097e6;
+    color: #ffffff;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    white-space: nowrap;
+    display: inline-block;
+}
+
+.player-assigned-name.mystery {
+    background: #e1b12c;
+    color: #ffffff;
+}
+
+.player-assigned-name.revealed {
+    background: #44bd32;
+    color: #ffffff;
+}
+
+.player-real-name {
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: #7f8fa6;
+    margin-top: 4px;
+}
+
+/* ── Tahmin alanı ────────────────── */
+#guess-area {
+    max-width: 500px;
+    margin: 30px auto 0;
+    text-align: center;
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #dcdde1;
+}
+
+.guess-input-row {
+    display: flex;
+    gap: 10px;
+}
+
+.guess-input-row input {
+    flex: 1;
+}
+
+#guess-feedback {
+    padding: 10px 12px;
+    border-radius: 6px;
+    margin-bottom: 10px;
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+#guess-feedback.correct {
+    background: #e5f9e7;
+    color: #44bd32;
+    border: 1px solid #44bd32;
+}
+
+#guess-feedback.wrong {
+    background: #fdeaea;
+    color: #e84118;
+    border: 1px solid #e84118;
+}
+
+/* ══════════════════════════════════
+   SONUÇ EKRANI
+   ══════════════════════════════════ */
+
+.result-container {
+    text-align: center;
+    max-width: 400px;
+    width: 100%;
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 8px;
+    border: 1px solid #dcdde1;
+}
+
+.result-container h1 {
+    margin-bottom: 20px;
+    color: #2f3640;
+}
+
+#rankings-list {
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.ranking-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px;
+    border-bottom: 1px solid #dcdde1;
+}
+
+.ranking-position {
+    font-size: 1.5rem;
+    font-weight: bold;
+    width: 40px;
+    text-align: center;
+}
+
+.ranking-position.gold { color: #e1b12c; }
+.ranking-position.silver { color: #7f8fa6; }
+.ranking-position.bronze { color: #cd6133; }
+
+.ranking-details {
+    flex: 1;
+}
+
+.ranking-details .name {
+    font-weight: bold;
+    color: #2f3640;
+}
+
+.ranking-details .assigned {
+    font-size: 0.8rem;
+    color: #7f8fa6;
+}
+
+.ranking-stats {
+    font-size: 0.75rem;
+    color: #4cd137;
+    margin-top: 2px;
+    font-weight: 600;
+}
+body.dark-mode .ranking-stats {
+    color: #44bd32;
+}
+
+/* ══════════════════════════════════
+   GELİŞMİŞ TEMA VE RENK AYARLARI
+   ══════════════════════════════════ */
+
+/* --- TEMA BUTONU ANA STİL --- */
+.theme-btn {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    /* Flex satırında (.top-right-controls) daralıp ovale dönmesin */
+    flex: 0 0 50px;
+    padding: 0;
+    border-radius: 50%;
+    border: 2px solid #dcdde1;
+    background-color: #ffffff !important; /* Light modda beyaz buton */
+    cursor: pointer;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+/* Light Mod: Ay İkonu Rengi (Koyu Gri/Lacivert) */
+#moon-icon {
+    color: #2f3640;
+    fill: #2f3640;
+}
+
+/* --- DARK MODE AKTİFKEN --- */
+body.dark-mode {
+    background-color: #121212 !important;
+    color: #ffffff !important;
+}
+
+/* Dark Modda Buton Rengi Değişsin */
+body.dark-mode .theme-btn {
+    background-color: #2a2f3a !important; /* .lang-select ile aynı zemin */
+    border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+body.dark-mode .theme-btn:hover {
+    border-color: rgba(255, 255, 255, 0.5) !important;
+}
+
+/* Dark Mod: Güneş İkonu Rengi */
+#sun-icon {
+    color: #ffffff;
+    /* fill:#ffffff çocuk <circle>'a miras kalıp güneşi beyaz lekeye çevirir */
+    fill: none;
+    stroke: currentColor;
+}
+
+/* İkonların görünürlüğünü ayarla */
+.hidden { display: none !important; }
+
+/* Koyu Modda Diğer Alanlar */
+body.dark-mode .lobby-container, 
+body.dark-mode .game-container, 
+body.dark-mode .result-container {
+    background-color: #1e1e1e !important;
+    border-color: #333 !important;
+    color: #fff !important;
+}
+
+body.dark-mode h1, body.dark-mode h2, body.dark-mode label {
+    color: #fff !important;
+}
+
+body.dark-mode input {
+    background: #2d2d2d !important;
+    color: #fff !important;
+    border: 1px solid #444 !important;
+}
+
+
+/* Kopyala butonu 📋 */
+body.dark-mode #btn-copy-code {
+    background-color: #3f444b !important;
+    color: white !important;
+    border: 1px solid #484d54 !important;
+    padding: 5px 10px !important;
+    border-radius: 4px;
+}
+body.dark-mode .room-code-display {
+    background-color: #2d3136;
+    border: 1px solid #3f444b;
+    color: #ffffff;
+    padding: 12px;
+    border-radius: 8px;
+    margin-top: 15px;
+    text-align: center;
+}
+
+body.dark-mode select {
+    background-color: #2d3136; /* Kutunun içi gri */
+    color: #ffffff;            /* Yazı beyaz */
+    border: 1px solid #3f444b;
+    padding: 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+}
+
+/* Select kutusunun içindeki seçenekler (açılınca görünen yer) */
+body.dark-mode select option {
+    background-color: #2d3136;
+    color: #ffffff;
+}
+
+/* Oyun Modu yazan label etiketi için */
+body.dark-mode label[for="select-category"] {
+    color: #ffffff;
+}
+
+
+/* Odaya katıldıktan sonra çıkan butonu koyulaştırır */
+body.dark-mode #btn-join:disabled,
+body.dark-mode .btn-primary:disabled {
+    background-color: #2d3136; /* Kutularla aynı gri tonu */
+    color: #7f8fa6;            /* Yazı rengini biraz sönük yaptık ki pasif olduğu belli olsun */
+    border: 1px solid #3f444b;
+    cursor: not-allowed;
+    opacity: 1;                /* Tarayıcı kendi kendine şeffaflaştırmasın diye */
+}
+
+
+
+/* "MASA" yazan başlık */
+body.dark-mode .lobby-container h2,
+body.dark-mode h2 {
+    color: #ffffff;
+}
+
+/* Masa başlığının altındaki o beyaz çizgiyi de koyulaştıralım */
+body.dark-mode h2::after {
+    background-color: #3f444b;
+}
+
+/* Oyuncu kartlarını (isimlerin yazdığı yerleri) gri yap */
+body.dark-mode .player-item {
+    background-color: #2d3136;
+    border: 1px solid #3f444b;
+    color: #ffffff;
+}
+
+/* "Oyuncular bekleniyor..." yazısı */
+body.dark-mode .hint {
+    color: #aeb9cc;
+}
+
+body.dark-mode #guess-area {
+    background-color: #1e1e1e;
+    border-color: #333;
+    color: #fff;
+}
+
+body.dark-mode #table-center {
+    background-color: #1e1e1e;
+    border-color: #333;
+    color: #fff;
+}
+
+body.dark-mode #players-circle .player-avatar {
+    background-color: #1e1e1e;
+    border-color: #333;
+    color: #fff;
+}
+
+
+body.dark-mode .btn-primary:hover {
+    background-color: #536dfe !important;
+    transform: translateY(-2px); /* Hafif yukarı kalkma efekti */
+}
+
+
+
+
+
+.color-pick {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid rgba(255,255,255,0.5);
+    transition: transform 0.2s;
+}
+.color-pick:hover { transform: scale(1.2); }
+
+
+/* ══════════════════════════════════
+   ELEME PANELİ (sağ alt)
+   ══════════════════════════════════ */
+
+.elim-fab {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: none;
+    background: #0097e6;
+    color: white;
+    cursor: pointer;
+    z-index: 9998;
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease, background 0.2s ease;
+}
+.elim-fab:hover { transform: scale(1.08); background: #00a8ff; }
+.elim-fab-icon { font-size: 1.5rem; }
+.elim-fab-badge {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    min-width: 22px;
+    height: 22px;
+    padding: 0 6px;
+    background: #e84118;
+    color: white;
+    border-radius: 11px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid white;
+}
+.elim-fab-badge.hidden { display: none; }
+
+.elim-panel {
+    position: fixed;
+    bottom: 96px;
+    right: 24px;
+    width: 360px;
+    max-width: calc(100vw - 48px);
+    max-height: calc(100vh - 140px);
+    background: #ffffff;
+    border-radius: 12px;
+    border: 1px solid #dcdde1;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
+    z-index: 9997;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    animation: elim-slide-up 0.2s ease-out;
+}
+.elim-panel.hidden { display: none; }
+
+@keyframes elim-slide-up {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.elim-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 14px;
+    background: #f5f6fa;
+    border-bottom: 1px solid #dcdde1;
+}
+.elim-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: bold;
+    color: #2f3640;
+}
+.elim-count {
+    font-size: 0.75rem;
+    color: #7f8fa6;
+    background: white;
+    padding: 2px 8px;
+    border-radius: 10px;
+    border: 1px solid #dcdde1;
+    font-weight: normal;
+}
+.elim-close {
+    background: transparent;
+    border: none;
+    color: #7f8fa6;
+    cursor: pointer;
+    font-size: 1.1rem;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+.elim-close:hover { background: #dcdde1; color: #2f3640; }
+
+.elim-notes {
+    width: calc(100% - 20px);
+    margin: 10px;
+    padding: 8px 10px;
+    border: 1px solid #dcdde1;
+    border-radius: 6px;
+    background: #fffde7;
+    color: #2f3640;
+    font-family: inherit;
+    font-size: 0.85rem;
+    resize: vertical;
+    outline: none;
+    min-height: 40px;
+}
+.elim-notes:focus { border-color: #0097e6; }
+
+.elim-toolbar {
+    display: flex;
+    gap: 8px;
+    padding: 0 10px 8px;
+}
+.elim-search {
+    flex: 1;
+    padding: 7px 10px !important;
+    border: 1px solid #dcdde1 !important;
+    border-radius: 6px;
+    font-size: 0.85rem !important;
+    background: #ffffff;
+    color: #2f3640;
+    outline: none;
+}
+.elim-search:focus { border-color: #0097e6 !important; }
+.elim-reset { padding: 6px 10px; font-size: 0.9rem; }
+
+.elim-tabs {
+    display: flex;
+    gap: 4px;
+    padding: 0 10px 8px;
+}
+.elim-tab {
+    flex: 1;
+    padding: 6px 8px;
+    border: 1px solid #dcdde1;
+    background: white;
+    color: #7f8fa6;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+.elim-tab:hover { background: #f5f6fa; }
+.elim-tab.active {
+    background: #0097e6;
+    color: white;
+    border-color: #0097e6;
+}
+
+.elim-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0 8px 10px;
+    min-height: 200px;
+    max-height: 50vh;
+}
+.elim-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 10px;
+    margin: 2px 0;
+    border-radius: 6px;
+    cursor: pointer;
+    color: #2f3640;
+    font-size: 0.88rem;
+    border: 1px solid transparent;
+    user-select: none;
+}
+.elim-item:hover {
+    background: #f5f6fa;
+    border-color: #dcdde1;
+}
+.elim-item-mark {
+    width: 18px;
+    height: 18px;
+    border: 2px solid #b2bec3;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 0.75rem;
+    color: white;
+}
+.elim-item-text {
+    flex: 1;
+    line-height: 1.2;
+}
+.elim-item-guess {
+    flex-shrink: 0;
+    background: #00a8ff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 4px 10px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    opacity: 0.85;
+    transition: opacity 0.15s, transform 0.1s;
+}
+.elim-item-guess:hover {
+    opacity: 1;
+    transform: scale(1.04);
+}
+.elim-item-guess:active {
+    transform: scale(0.97);
+}
+.elim-item.eliminated .elim-item-guess {
+    background: #b2bec3;
+    cursor: not-allowed;
+}
+.elim-item-guess:disabled {
+    background: #b2bec3;
+    cursor: not-allowed;
+    opacity: 0.55;
+}
+.elim-item-guess:disabled:hover {
+    transform: none;
+}
+.elim-item.eliminated {
+    opacity: 0.4;
+    background: #fdeaea;
+}
+.elim-item.eliminated .elim-item-text {
+    text-decoration: line-through;
+    color: #e84118;
+}
+.elim-item.eliminated .elim-item-mark {
+    background: #e84118;
+    border-color: #e84118;
+}
+.elim-item.eliminated .elim-item-mark::after { content: "✕"; }
+.elim-empty {
+    padding: 24px 10px;
+    text-align: center;
+    color: #7f8fa6;
+    font-size: 0.85rem;
+}
+
+/* Dark mode */
+body.dark-mode .elim-panel {
+    background: #1e1e1e;
+    border-color: #333;
+    color: #fff;
+}
+body.dark-mode .elim-header {
+    background: #2d3136;
+    border-color: #3f444b;
+}
+body.dark-mode .elim-title { color: #fff; }
+body.dark-mode .elim-count {
+    background: #1e1e1e;
+    border-color: #3f444b;
+    color: #aeb9cc;
+}
+body.dark-mode .elim-close { color: #aeb9cc; }
+body.dark-mode .elim-close:hover { background: #3f444b; color: #fff; }
+body.dark-mode .elim-notes {
+    background: #2d3136;
+    border-color: #3f444b;
+    color: #fff;
+}
+body.dark-mode .elim-search {
+    background: #2d3136 !important;
+    border-color: #3f444b !important;
+    color: #fff !important;
+}
+body.dark-mode .elim-tab {
+    background: #2d3136;
+    border-color: #3f444b;
+    color: #aeb9cc;
+}
+body.dark-mode .elim-tab:hover { background: #3f444b; }
+body.dark-mode .elim-tab.active {
+    background: #0097e6;
+    color: white;
+    border-color: #0097e6;
+}
+body.dark-mode .elim-item { color: #fff; }
+body.dark-mode .elim-item:hover {
+    background: #2d3136;
+    border-color: #3f444b;
+}
+body.dark-mode .elim-item.eliminated {
+    background: rgba(232, 65, 24, 0.15);
+}
+body.dark-mode .elim-item-guess {
+    background: #0097e6;
+}
+body.dark-mode .elim-item.eliminated .elim-item-guess {
+    background: #4a5058;
+}
+body.dark-mode .elim-empty { color: #aeb9cc; }
+body.dark-mode .elim-fab {
+    background: #536dfe;
+}
+body.dark-mode .elim-fab:hover { background: #6c83ff; }
+
+@media (max-width: 480px) {
+    .elim-panel {
+        right: 12px;
+        left: 12px;
+        width: auto;
+        bottom: 88px;
+    }
+    .elim-fab {
+        bottom: 16px;
+        right: 16px;
+    }
+}
+
+
+/* ══════════════════════════════════
+   TOP-RIGHT CONTROLS (tema + ses)
+   ══════════════════════════════════ */
+.top-right-controls {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    display: flex;
+    gap: 10px;
+}
+.top-right-controls .theme-btn { position: static; }
+.sound-btn { font-size: 1.3rem; }
+.sound-btn span { line-height: 1; }
+
+.lang-select {
+    background: var(--bg-color, #fff);
+    color: var(--text-color, #222);
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    padding: 6px 10px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    outline: none;
+    transition: background 0.2s, border-color 0.2s;
+}
+.lang-select:hover { border-color: rgba(0, 0, 0, 0.4); }
+body.dark-mode .lang-select {
+    background: #2a2f3a;
+    color: #f0f0f0;
+    border-color: rgba(255, 255, 255, 0.2);
+}
+body.dark-mode .lang-select:hover { border-color: rgba(255, 255, 255, 0.5); }
+
+
+/* ══════════════════════════════════
+   AVATAR PICKER (lobby)
+   ══════════════════════════════════ */
+.avatar-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 6px;
+    padding: 8px;
+    border: 1px solid #dcdde1;
+    border-radius: 6px;
+    background: #f5f6fa;
+}
+.avatar-cell {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1.4rem;
+    background: white;
+    border: 2px solid transparent;
+    transition: transform 0.15s, border-color 0.15s;
+    user-select: none;
+}
+.avatar-cell:hover { transform: scale(1.1); }
+.avatar-cell.selected {
+    border-color: #0097e6;
+    background: #e1f5fe;
+}
+
+/* Oyuncu listesinde avatar göstergesi */
+#player-list li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.player-list-avatar {
+    font-size: 1.2rem;
+    width: 28px;
+    text-align: center;
+}
+
+/* Form select / textarea stilleri */
+.select-styled {
+    width: 100%;
+    padding: 8px 10px;
+    border-radius: 6px;
+    border: 1px solid #dcdde1;
+    background: white;
+    color: #2f3640;
+    font-family: inherit;
+    font-size: 0.95rem;
+}
+.select-styled:focus {
+    border-color: #0097e6;
+    outline: none;
+}
+textarea.select-styled {
+    resize: vertical;
+    min-height: 80px;
+}
+
+body.dark-mode .avatar-grid {
+    background: #2d3136;
+    border-color: #3f444b;
+}
+body.dark-mode .avatar-cell {
+    background: #1e1e1e;
+}
+body.dark-mode .avatar-cell.selected {
+    background: #0d3a52;
+    border-color: #0097e6;
+}
+body.dark-mode .select-styled {
+    background: #2d3136;
+    color: #fff;
+    border-color: #3f444b;
+}
+
+
+/* ══════════════════════════════════
+   TURN BAR + TIMER + PAS
+   ══════════════════════════════════ */
+.turn-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin: 12px auto 0;
+    padding: 8px 14px;
+    background: #fff;
+    border: 1px solid #dcdde1;
+    border-radius: 10px;
+    max-width: 540px;
+    flex-wrap: wrap;
+}
+.turn-label {
+    color: #7f8fa6;
+    font-size: 0.85rem;
+}
+.turn-name {
+    font-weight: bold;
+    color: #0097e6;
+    padding: 2px 10px;
+    background: #e1f5fe;
+    border-radius: 16px;
+    font-size: 0.95rem;
+}
+.turn-name.is-me {
+    background: #44bd32;
+    color: white;
+    animation: turn-pulse 1.6s ease-in-out infinite;
+}
+@keyframes turn-pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(68, 189, 50, 0.6); }
+    50% { box-shadow: 0 0 0 8px rgba(68, 189, 50, 0); }
+}
+
+.timer-pill {
+    background: #fff8e1;
+    color: #e1b12c;
+    padding: 4px 12px;
+    border-radius: 16px;
+    font-weight: bold;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9rem;
+    border: 1px solid #f4d35e;
+}
+.timer-pill.warning {
+    background: #fdeaea;
+    color: #e84118;
+    border-color: #e84118;
+    animation: timer-flash 0.8s ease-in-out infinite;
+}
+@keyframes timer-flash {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.55; }
+}
+
+.pass-btn {
+    padding: 5px 10px !important;
+    font-weight: bold;
+    background: #e1f5fe;
+    color: #0097e6;
+    border-color: #b3e5fc;
+}
+.pass-btn:hover { background: #0097e6; color: white; }
+
+body.dark-mode .turn-bar {
+    background: #1e1e1e;
+    border-color: #333;
+}
+body.dark-mode .turn-name { background: #0d3a52; color: #4fc3f7; }
+body.dark-mode .turn-name.is-me { background: #44bd32; color: white; }
+body.dark-mode .timer-pill { background: #2d3136; color: #f4d35e; border-color: #3f444b; }
+
+
+/* ══════════════════════════════════
+   AVATAR / TURN HIGHLIGHT (masa)
+   ══════════════════════════════════ */
+.player-node.is-turn .player-avatar {
+    border-color: #44bd32;
+    box-shadow: 0 0 0 4px rgba(68, 189, 50, 0.3);
+    animation: turn-pulse 1.6s ease-in-out infinite;
+}
+.player-avatar {
+    font-size: 1.5rem;
+    line-height: 1;
+}
+
+
+/* ══════════════════════════════════
+   Q&A LOG PANELİ (sol alt)
+   ══════════════════════════════════ */
+.log-fab {
+    position: fixed;
+    bottom: 24px;
+    left: 24px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: none;
+    background: #44bd32;
+    color: white;
+    cursor: pointer;
+    z-index: 9998;
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease, background 0.2s ease;
+}
+.log-fab:hover { transform: scale(1.08); background: #4cd137; }
+.log-fab-icon { font-size: 1.5rem; }
+.log-fab-badge {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    min-width: 22px;
+    height: 22px;
+    padding: 0 6px;
+    background: #e84118;
+    color: white;
+    border-radius: 11px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid white;
+}
+.log-fab-badge.hidden { display: none; }
+
+.log-panel {
+    position: fixed;
+    bottom: 96px;
+    left: 24px;
+    width: 360px;
+    max-width: calc(100vw - 48px);
+    max-height: calc(100vh - 140px);
+    background: #ffffff;
+    border-radius: 12px;
+    border: 1px solid #dcdde1;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
+    z-index: 9997;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    animation: elim-slide-up 0.2s ease-out;
+}
+.log-panel.hidden { display: none; }
+
+.log-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px 12px;
+    min-height: 240px;
+    max-height: 45vh;
+}
+.log-entry {
+    display: flex;
+    gap: 8px;
+    padding: 6px 0;
+    align-items: flex-start;
+}
+.log-entry-avatar {
+    font-size: 1.2rem;
+    flex-shrink: 0;
+    width: 28px;
+    text-align: center;
+    line-height: 1.4;
+}
+.log-entry-body {
+    flex: 1;
+    min-width: 0;
+}
+.log-entry-author {
+    font-size: 0.75rem;
+    font-weight: bold;
+    color: #7f8fa6;
+}
+.log-entry-text {
+    font-size: 0.9rem;
+    color: #2f3640;
+    word-break: break-word;
+    padding: 6px 10px;
+    border-radius: 8px;
+    background: #f5f6fa;
+    display: inline-block;
+    margin-top: 2px;
+}
+.log-entry[data-kind="yes"] .log-entry-text { background: #d4edda; color: #155724; }
+.log-entry[data-kind="no"] .log-entry-text { background: #f8d7da; color: #721c24; }
+.log-entry[data-kind="maybe"] .log-entry-text { background: #fff3cd; color: #856404; }
+.log-entry[data-kind="note"] .log-entry-text { background: #e1f5fe; color: #01579b; }
+.log-entry[data-kind="guess_correct"] .log-entry-text { background: #c3f7d4; color: #0a4f24; font-weight: bold; }
+.log-entry[data-kind="guess_wrong"] .log-entry-text { background: #fde2e2; color: #842029; font-style: italic; }
+
+.log-quick {
+    display: flex;
+    gap: 6px;
+    padding: 0 10px 6px;
+}
+.log-quick-btn {
+    flex: 1;
+    padding: 6px 4px;
+    border: 1px solid #dcdde1;
+    border-radius: 6px;
+    background: white;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+.log-quick-btn:hover { background: #f5f6fa; }
+.log-quick-btn[data-kind="yes"]:hover { background: #d4edda; }
+.log-quick-btn[data-kind="no"]:hover { background: #f8d7da; }
+.log-quick-btn[data-kind="maybe"]:hover { background: #fff3cd; }
+
+.log-input-row {
+    display: flex;
+    gap: 6px;
+    padding: 6px 10px 10px;
+    border-top: 1px solid #dcdde1;
+}
+.log-input-row input {
+    flex: 1;
+    padding: 7px 10px;
+    border: 1px solid #dcdde1;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    outline: none;
+}
+.log-input-row input:focus { border-color: #0097e6; }
+.log-send { padding: 7px 14px !important; margin-top: 0 !important; font-size: 0.85rem; }
+
+.log-empty {
+    color: #7f8fa6;
+    text-align: center;
+    padding: 30px 10px;
+    font-size: 0.85rem;
+}
+
+body.dark-mode .log-panel {
+    background: #1e1e1e;
+    border-color: #333;
+    color: #fff;
+}
+body.dark-mode .log-entry-text { background: #2d3136; color: #fff; }
+body.dark-mode .log-entry-author { color: #aeb9cc; }
+body.dark-mode .log-quick-btn {
+    background: #2d3136;
+    border-color: #3f444b;
+    color: #fff;
+}
+body.dark-mode .log-quick-btn:hover { background: #3f444b; }
+body.dark-mode .log-input-row input {
+    background: #2d3136;
+    color: #fff;
+    border-color: #3f444b;
+}
+body.dark-mode .log-input-row { border-top-color: #3f444b; }
+body.dark-mode .log-empty { color: #aeb9cc; }
+
+
+/* ══════════════════════════════════
+   3-STATE ELIM (aday / şüpheli / elenmiş)
+   ══════════════════════════════════ */
+.elim-item.suspect {
+    background: #fff8e1;
+}
+.elim-item.suspect .elim-item-mark {
+    background: #e1b12c;
+    border-color: #e1b12c;
+}
+.elim-item.suspect .elim-item-mark::after { content: "⚠"; }
+.elim-item.suspect .elim-item-text {
+    color: #856404;
+    font-weight: bold;
+}
+body.dark-mode .elim-item.suspect {
+    background: rgba(225, 177, 44, 0.15);
+}
+body.dark-mode .elim-item.suspect .elim-item-text { color: #f4d35e; }
+
+/* mevcut tab'lara "şüpheli" eklemek için */
+.elim-tab[data-tab="suspect"] { color: #e1b12c; }
+.elim-tab[data-tab="suspect"].active {
+    background: #e1b12c;
+    border-color: #e1b12c;
+    color: white;
+}
+
+
+@media (max-width: 480px) {
+    .log-panel {
+        left: 12px;
+        right: 12px;
+        width: auto;
+        bottom: 88px;
+    }
+    .log-fab {
+        bottom: 16px;
+        left: 16px;
+    }
+    .turn-bar { font-size: 0.85rem; padding: 6px 8px; }
+}
+
+
